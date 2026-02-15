@@ -1,95 +1,188 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nurafshon Ramazon</title>
-<style>
-  body { font-family: Arial, sans-serif; background: linear-gradient(to bottom, #fff, #f0f0f0); margin:0; padding:0;}
-  header { background: #4CAF50; color: white; padding: 1em; text-align: center; }
-  nav { display: flex; justify-content: center; background: #333; }
-  nav button { margin: 0.5em; padding: 0.5em 1em; color: white; background: #555; border: none; cursor:pointer; }
-  nav button:hover { background: #777; }
-  section { padding: 1em; max-width: 700px; margin:auto;}
-  .card { background: white; padding: 1em; margin: 1em 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
-  table { width: 100%; border-collapse: collapse; }
-  th, td { border: 1px solid #ccc; padding: 0.5em; text-align:center; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ramazon taqvimi - Nurafshon shahri</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url('https://images.unsplash.com/photo-1580185106476-f8e57a0b3d02?fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #064635;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,0.8);
+    }
+    nav {
+      text-align: center;
+      margin: 10px 0;
+    }
+    nav button {
+      margin: 0 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #0f5132;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    nav button:hover {
+      background-color: #146443;
+    }
+    table {
+      width: 90%;
+      margin: 0 auto 20px auto;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.9);
+    }
+    th, td {
+      border: 1px solid #064635;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #146443;
+      color: white;
+    }
+    .today {
+      background-color: #ffd700 !important;
+    }
+    section {
+      display: none;
+      padding: 20px;
+    }
+    section.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Ramazon taqvimi - Nurafshon shahri</h1>
+    <nav>
+      <button onclick="showSection('calendar')">Asosiy sahifa</button>
+      <button onclick="showSection('duolar')">Duolar</button>
+      <button onclick="showSection('tasbeh')">Tasbeh</button>
+    </nav>
+  </header>
 
-<header>
-  <h1>🌙 Nurafshon Ramazon 2026</h1>
-</header>
-
-<nav>
-  <button onclick="location.href='index.html'">🏠 Bosh sahifa</button>
-  <button onclick="location.href='duolar.html'">📿 Duolar</button>
-  <button onclick="location.href='tasbeh.html'">📿 Tasbeh</button>
-  <button onclick="location.href='amal.html'">🤍 Amallar</button>
-</nav>
-
-<section>
-  <div class="card">
-    <h2>Bugungi saharlik va iftor vaqtlari</h2>
-    <p>Saharlik (Fajr): <span id="saharlik-time">Yuklanmoqda...</span></p>
-    <p>Iftor (Maghrib): <span id="iftor-time">Yuklanmoqda...</span></p>
-  </div>
-
-  <div class="card">
-    <h2>30 kunlik Ramazon taqvimi (Nurafshon)</h2>
-    <table id="ramazon-table">
-      <tr>
-        <th>Kun</th>
-        <th>Saharlik</th>
-        <th>Iftor</th>
-      </tr>
+  <section id="calendar" class="active">
+    <table>
+      <thead>
+        <tr>
+          <th>Kun</th>
+          <th>Saharlik</th>
+          <th>Iftor</th>
+          <th>Bugungi amal</th>
+        </tr>
+      </thead>
+      <tbody id="taqvim-body">
+        <!-- Dinamik kod orqali yuklanadi -->
+      </tbody>
     </table>
-  </div>
-</section>
+  </section>
 
-<script>
-// Nurafshon koordinatalari
-const lat = 41.2;
-const lon = 69.3;
+  <section id="duolar">
+    <h2>Duolar ro‘yxati</h2>
+    <ul id="duolar-list">
+      <li>1. Bismillahir rohmanir rohim</li>
+      <li>2. Subhanalloh</li>
+      <li>3. Alhamdulilloh</li>
+      <li>4. Allohu akbar</li>
+      <li>5. Astaghfirulloh</li>
+      <!-- Shu tarzda ko‘proq duolar qo‘shish mumkin -->
+    </ul>
+  </section>
 
-async function getPrayerTimes(date) {
-  try {
-    const res = await fetch(`https://api.ummahapi.com/prayer?lat=${lat}&lon=${lon}&date=${date}`);
-    const data = await res.json();
-    return {fajr: data.data.timings.Fajr, maghrib: data.data.timings.Maghrib};
-  } catch (e) {
-    console.error("API xatolik:", e);
-    return {fajr: "Xatolik", maghrib: "Xatolik"};
-  }
-}
+  <section id="tasbeh">
+    <h2>Tasbeh</h2>
+    <p>Subhanalloh <span id="tasbeh-count">0</span> marta</p>
+    <button onclick="countTasbeh()">Qo‘shish</button>
+    <button onclick="resetTasbeh()">Tugatish</button>
+  </section>
 
-async function loadTodayTimes() {
-  const today = new Date().toISOString().slice(0,10);
-  const times = await getPrayerTimes(today);
-  document.getElementById("saharlik-time").textContent = times.fajr;
-  document.getElementById("iftor-time").textContent = times.maghrib;
-}
+  <script>
+    const amalList = [
+      "Ota-onaga xizmat qil",
+      "Kamida 1 kishiga yordam qil",
+      "Masjidga boring",
+      "Kitob o‘qing",
+      "Yomon odatdan tiyil",
+      "Do‘stga yaxshilik qil",
+      "Uy tozalang",
+      "Qariyaga yordam qil",
+      "Tabiatni asrang",
+      "Ota-onaga sovg‘a qil",
+      "Do‘stga duo qil",
+      "Saharlik duosini o‘qing",
+      "Qo‘shni bilan suhbat qil",
+      "Masjidga kitob olib boring",
+      "O‘zingni kechir",
+      "Tabiiy mahsulot iste’mol qil",
+      "Bilimingni oshir",
+      "Yangi til o‘rganing",
+      "Kamida 1 kishiga maslahat bering",
+      "Xayrli ish qil",
+      "Ota-onaga duo qil",
+      "Do‘stga sovg‘a qil",
+      "Masjidda namoz o‘qing",
+      "Tabiatni asrang",
+      "Yoshlarni tarbiyalang",
+      "Kuchli niyat qil",
+      "Xayrli odatni rivojlantiring",
+      "Sabr qiling",
+      "Qur’on tilovat qiling",
+      "O‘zingni rohatlantiring"
+    ];
 
-async function loadRamazonTable() {
-  const table = document.getElementById("ramazon-table");
-  const startDate = new Date(2026,2,14); // Ramazon boshlanish sanasi: 14 mart 2026
-  for (let i=0; i<30; i++) {
-    const d = new Date(startDate);
-    d.setDate(startDate.getDate()+i);
-    const dateStr = d.toISOString().slice(0,10);
-    const times = await getPrayerTimes(dateStr);
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${i+1}</td><td>${times.fajr}</td><td>${times.maghrib}</td>`;
-    table.appendChild(row);
-  }
-}
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+    }
 
-window.onload = () => {
-  loadTodayTimes();
-  loadRamazonTable();
-};
-</script>
+    let tasbehCount = 0;
+    function countTasbeh() {
+      tasbehCount++;
+      document.getElementById('tasbeh-count').textContent = tasbehCount;
+    }
+    function resetTasbeh() {
+      tasbehCount = 0;
+      document.getElementById('tasbeh-count').textContent = tasbehCount;
+    }
 
+    // API orqali saharlik va iftor vaqtini olish
+    const taqvimBody = document.getElementById('taqvim-body');
+    const city = "Nurafshon,UZ";
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear();
+
+    async function loadTimes() {
+      for (let day = 1; day <= 30; day++) {
+        const dateStr = `${year}-${month.toString().padStart(2,'0')}-${day.toString().padStart(2,'0')}`;
+        const response = await fetch(`https://api.aladhan.com/v1/timingsByCity/${dateStr}?city=Nurafshon&country=Uzbekistan&method=2`);
+        const data = await response.json();
+        const saharlik = data.data.timings.Fajr;
+        const iftor = data.data.timings.Maghrib;
+
+        const tr = document.createElement('tr');
+        const today = new Date().getDate() === day ? 'today' : '';
+        tr.innerHTML = `
+          <td class="${today}">${day}</td>
+          <td class="${today}">${saharlik}</td>
+          <td class="${today}">${iftor}</td>
+          <td class="${today}">${amalList[day-1]}</td>
+        `;
+        taqvimBody.appendChild(tr);
+      }
+    }
+
+    loadTimes();
+  </script>
 </body>
 </html>
