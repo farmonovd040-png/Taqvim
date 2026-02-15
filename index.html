@@ -1,49 +1,95 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <title>Mohi Ramazon - Nurafshon</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nurafshon Ramazon</title>
+<style>
+  body { font-family: Arial, sans-serif; background: linear-gradient(to bottom, #fff, #f0f0f0); margin:0; padding:0;}
+  header { background: #4CAF50; color: white; padding: 1em; text-align: center; }
+  nav { display: flex; justify-content: center; background: #333; }
+  nav button { margin: 0.5em; padding: 0.5em 1em; color: white; background: #555; border: none; cursor:pointer; }
+  nav button:hover { background: #777; }
+  section { padding: 1em; max-width: 700px; margin:auto;}
+  .card { background: white; padding: 1em; margin: 1em 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border: 1px solid #ccc; padding: 0.5em; text-align:center; }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🌙 Mohi Ramazon - Nurafshon shahri</h1>
-    <p class="subtitle">Ramazon oyida har bir musulmon uchun bepul, foydali sahifa</p>
+<header>
+  <h1>🌙 Nurafshon Ramazon 2026</h1>
+</header>
 
-    <nav>
-        <a href="duolar.html">📿 Duolar</a>
-        <a href="taqvim.html">🗓 Ramazon taqvimi</a>
-    </nav>
+<nav>
+  <button onclick="location.href='index.html'">🏠 Bosh sahifa</button>
+  <button onclick="location.href='duolar.html'">📿 Duolar</button>
+  <button onclick="location.href='tasbeh.html'">📿 Tasbeh</button>
+  <button onclick="location.href='amal.html'">🤍 Amallar</button>
+</nav>
 
-    <div class="card">
-        <h2>🕋 Bugungi niyat (saharlik)</h2>
-        <p>
-            Navaytu an asuma sovma shahri ramazona minal fajri ilal mag‘ribi
-            xolisan lillahi ta’ala.
-        </p>
-    </div>
+<section>
+  <div class="card">
+    <h2>Bugungi saharlik va iftor vaqtlari</h2>
+    <p>Saharlik (Fajr): <span id="saharlik-time">Yuklanmoqda...</span></p>
+    <p>Iftor (Maghrib): <span id="iftor-time">Yuklanmoqda...</span></p>
+  </div>
 
-    <div class="card">
-        <h2>🍽 Iftor duosi</h2>
-        <p>
-            Allohumma laka sumtu va bika aamantu va ‘alayka tavakkaltu
-            va ‘ala rizqika aftartu.
-        </p>
-    </div>
+  <div class="card">
+    <h2>30 kunlik Ramazon taqvimi (Nurafshon)</h2>
+    <table id="ramazon-table">
+      <tr>
+        <th>Kun</th>
+        <th>Saharlik</th>
+        <th>Iftor</th>
+      </tr>
+    </table>
+  </div>
+</section>
 
-    <div class="card">
-        <h2>🤍 Bugungi amal</h2>
-        <p>Bugun ota-onangga kamida 1 ta xizmat qil.</p>
-    </div>
+<script>
+// Nurafshon koordinatalari
+const lat = 41.2;
+const lon = 69.3;
 
-    <footer>
-        <p>
-            Bu sayt savob uchun, bepul va reklamasiz tayyorlandi.  
-            Iloji bo‘lsa, boshqalarga ham ulashing.
-        </p>
-    </footer>
-</div>
+async function getPrayerTimes(date) {
+  try {
+    const res = await fetch(`https://api.ummahapi.com/prayer?lat=${lat}&lon=${lon}&date=${date}`);
+    const data = await res.json();
+    return {fajr: data.data.timings.Fajr, maghrib: data.data.timings.Maghrib};
+  } catch (e) {
+    console.error("API xatolik:", e);
+    return {fajr: "Xatolik", maghrib: "Xatolik"};
+  }
+}
+
+async function loadTodayTimes() {
+  const today = new Date().toISOString().slice(0,10);
+  const times = await getPrayerTimes(today);
+  document.getElementById("saharlik-time").textContent = times.fajr;
+  document.getElementById("iftor-time").textContent = times.maghrib;
+}
+
+async function loadRamazonTable() {
+  const table = document.getElementById("ramazon-table");
+  const startDate = new Date(2026,2,14); // Ramazon boshlanish sanasi: 14 mart 2026
+  for (let i=0; i<30; i++) {
+    const d = new Date(startDate);
+    d.setDate(startDate.getDate()+i);
+    const dateStr = d.toISOString().slice(0,10);
+    const times = await getPrayerTimes(dateStr);
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${i+1}</td><td>${times.fajr}</td><td>${times.maghrib}</td>`;
+    table.appendChild(row);
+  }
+}
+
+window.onload = () => {
+  loadTodayTimes();
+  loadRamazonTable();
+};
+</script>
 
 </body>
 </html>
