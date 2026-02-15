@@ -1,50 +1,46 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <title>Duolar - Mohi Ramazon</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duolar</title>
+<style>
+body { font-family: Arial; background:#fefefe; margin:0; padding:0;}
+header { background:#4CAF50; color:white; text-align:center; padding:1em; }
+nav { display:flex; justify-content:center; background:#333; }
+nav button { margin:0.5em; padding:0.5em 1em; color:white; background:#555; border:none; cursor:pointer; }
+nav button:hover { background:#777; }
+section { max-width:700px; margin:auto; padding:1em;}
+.card { background:white; padding:1em; margin:1em 0; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+</style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🌙 Duolar</h1>
+<header>
+  <h1>📿 Duolar</h1>
+</header>
 
-    <nav>
-        <a href="index.html">🏠 Asosiy sahifa</a>
-        <a href="taqvim.html">🗓 Ramazon taqvimi</a>
-    </nav>
+<nav>
+  <button onclick="location.href='index.html'">🏠 Bosh sahifa</button>
+  <button onclick="location.href='duolar.html'">📿 Duolar</button>
+  <button onclick="location.href='tasbeh.html'">📿 Tasbeh</button>
+  <button onclick="location.href='amal.html'">🤍 Amallar</button>
+</nav>
 
-    <div class="card">
-        <h2>🕋 Saharlik duosi</h2>
-        <p>
-            Navaytu an asuma sovma shahri ramazona minal fajri ilal mag‘ribi
-            xolisan lillahi ta’ala.
-        </p>
-    </div>
-
-    <div class="card">
-        <h2>🍽 Iftor duosi</h2>
-        <p>
-            Allohumma laka sumtu va bika aamantu va ‘alayka tavakkaltu
-            va ‘ala rizqika aftartu.
-        </p>
-    </div>
-
-    <div class="card">
-        <h2>🌌 Laylatul Qadr duolari</h2>
-        <p>
-            Allahumma innaka afuwwun tuhibbul afwa fa’fu anni
-        </p>
-    </div>
-
-    <footer>
-        <p>
-            Bu sayt savob uchun, bepul va reklamasiz tayyorlandi.  
-            Iloji bo‘lsa, boshqalarga ham ulashing.
-        </p>
-    </footer>
-</div>
+<section>
+  <div class="card">
+    <h2>🕋 Saharlik duosi</h2>
+    <p>Navaytu an asuma sovma shahri ramazona ...</p>
+  </div>
+  <div class="card">
+    <h2>🍽 Iftor duosi</h2>
+    <p>Allohumma laka sumtu va bika aamantu ...</p>
+  </div>
+  <div class="card">
+    <h2>🌌 Laylatul Qadr duosi</h2>
+    <p>Allahumma innaka afuwwun tuhibbul afwa ...</p>
+  </div>
+</section>
 
 </body>
 </html>
